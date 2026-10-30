@@ -24,6 +24,11 @@ graph LR
 - База данных: PostgreSQL 15
 - Библиотеки: requests, psycopg2, airflow.providers.smtp
 
+## Структура репозитория
+
+* **[`dags/currency_rates_dag.py`](dags/currency_rates_dag.py)** — исходный код DAG (PythonOperator + EmailOperator).
+* `docs/` — скриншоты работы пайплайна.
+
 ## Скриншоты работы
 
 **1. Успешное выполнение DAG в Airflow:**
