@@ -6,14 +6,17 @@ DAG автоматически запускается по расписанию 
 
 ## 🏗 Архитектура
 
-```mermaid
-graph LR
-    A[open.er-api.com<br/>REST API] -->|HTTP GET| B(PythonOperator<br/>fetch_currency_rates)
-    B -->|INSERT| C[(PostgreSQL<br/>currency_rates)]
-    B -->|XCom| D(EmailOperator<br/>send_email)
-    D -->|SMTP SSL| E[Mail.ru<br/>Email]
+```text
+[open.er-api.com] (REST API)
+       │
+       │ HTTP GET
+       ▼
+[PythonOperator: fetch_currency_rates]
+       │
+       ├──▶ [PostgreSQL: currency_rates] (INSERT)
+       │
+       └──▶ [EmailOperator: send_email] ──(SMTP SSL)──▶ [Mail.ru Email]
 ```
-
 🛠 Стек технологий
 Оркестрация: Apache Airflow 2.8.1 (развернут в Docker, LocalExecutor)
 
@@ -36,26 +39,25 @@ dags/currency_rates_dag.py — код DAG (PythonOperator + EmailOperator).
 docs/ — скриншоты работы пайплайна.
 
 📸 Скриншоты работы
-**1. Успешное выполнение DAG в Airflow (Graph View):**
-![Graph](01_dag_graph_success.png)
+1. Успешное выполнение DAG в Airflow (Graph View):
+https://01_dag_graph_success.png/
 
-**2. Лог выполнения задачи `fetch_currency_rates`:**
-![Task Log](04_task_log.png)
+2. Лог выполнения задачи fetch_currency_rates:
+https://04_task_log.png/
 
-**3. Данные, сохраненные в PostgreSQL (pgAdmin):**
-![PostgreSQL](05_postgres_data.png)
+3. Данные, сохраненные в PostgreSQL (pgAdmin):
+https://05_postgres_data.png/
 
-**4. Результат отправки Email (Mail.ru):**
-
-![Email](07_email_result.png)
+4. Результат отправки Email (Mail.ru):
+https://07_email_result.png/
 
 🚀 Как запустить локально
 Установите Docker и Docker Compose.
 
 Клонируйте репозиторий.
 
-Создайте файл docker-compose.yml (пример конфигурации см. в docs/docker-compose.yml — опционально).
-
 Выполните docker compose up -d.
 
 Откройте Airflow UI по адресу http://localhost:8080, включите DAG currency_rates_pipeline и нажмите Trigger DAG.
+
+text
