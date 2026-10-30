@@ -1,63 +1,38 @@
 # Airflow E2E Pipeline: Currency Rates API → PostgreSQL → Email
 
-Этот проект демонстрирует end-to-end (E2E) пайплайн оркестрации данных с использованием **Apache Airflow**. 
+Этот проект демонстрирует E2E-пайплайн оркестрации данных с использованием Apache Airflow. DAG автоматически забирает курсы валют через REST API, сохраняет их в PostgreSQL и отправляет уведомление на Email.
 
-DAG автоматически запускается по расписанию (ежедневно), забирает актуальные курсы валют через внешний REST API, сохраняет их в реляционную базу данных (PostgreSQL) и отправляет уведомление на Email.
+## Архитектура
 
-## 🏗 Архитектура
+Текстовое описание пайплайна:
 
-```text
-[open.er-api.com] (REST API)
-       │
-       │ HTTP GET
-       ▼
-[PythonOperator: fetch_currency_rates]
-       │
-       ├──▶ [PostgreSQL: currency_rates] (INSERT)
-       │
-       └──▶ [EmailOperator: send_email] ──(SMTP SSL)──▶ [Mail.ru Email]
-```
-🛠 Стек технологий
-Оркестрация: Apache Airflow 2.8.1 (развернут в Docker, LocalExecutor)
+- REST API (open.er-api.com) -> PythonOperator (fetch_currency_rates)
+- PythonOperator -> PostgreSQL (таблица currency_rates)
+- PythonOperator -> EmailOperator (send_email) -> SMTP Mail.ru
 
-Язык: Python 3.11
+## Стек технологий
 
-База данных: PostgreSQL 15
+- Оркестрация: Apache Airflow 2.8.1 (Docker)
+- Язык: Python 3.11
+- База данных: PostgreSQL 15
+- Библиотеки: requests, psycopg2, airflow.providers.smtp
 
-Библиотеки: requests (API), psycopg2 (PostgreSQL), airflow.providers.smtp (Email)
+## Скриншоты работы
 
-✨ Особенности реализации
-Docker: Стек Airflow (webserver, scheduler, postgres) развернут через docker-compose.
+**1. Успешное выполнение DAG в Airflow:**
+![Graph](01_dag_graph_success.png)
 
-Сетевое взаимодействие: Поскольку Airflow запущен в контейнере внутри VM, а PostgreSQL — на хосте Windows, для подключения используется IP-адрес 10.0.2.2 (VirtualBox NAT).
+**2. Лог выполнения задачи fetch_currency_rates:**
+![Task Log](04_task_log.png)
 
-SMTP: Для отправки писем через Mail.ru настроен неявный SSL (порт 465), а STARTTLS отключен (STARTTLS=False), так как сервер его не поддерживает.
+**3. Данные в PostgreSQL (pgAdmin):**
+![PostgreSQL](05_postgres_data.png)
 
-📂 Структура репозитория
-dags/currency_rates_dag.py — код DAG (PythonOperator + EmailOperator).
+**4. Результат отправки Email:**
+![Email](07_email_result.png)
 
-docs/ — скриншоты работы пайплайна.
+## Как запустить локально
 
-📸 Скриншоты работы
-1. Успешное выполнение DAG в Airflow (Graph View):
-https://01_dag_graph_success.png/
-
-2. Лог выполнения задачи fetch_currency_rates:
-https://04_task_log.png/
-
-3. Данные, сохраненные в PostgreSQL (pgAdmin):
-https://05_postgres_data.png/
-
-4. Результат отправки Email (Mail.ru):
-https://07_email_result.png/
-
-🚀 Как запустить локально
-Установите Docker и Docker Compose.
-
-Клонируйте репозиторий.
-
-Выполните docker compose up -d.
-
-Откройте Airflow UI по адресу http://localhost:8080, включите DAG currency_rates_pipeline и нажмите Trigger DAG.
-
-text
+1. Установите Docker и Docker Compose.
+2. Выполните `docker compose up -d`.
+3. Откройте Airflow UI по адресу http://localhost:8080, включите DAG и нажмите Trigger DAG.
