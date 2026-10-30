@@ -12,6 +12,8 @@ graph LR
     B -->|INSERT| C[(PostgreSQL<br/>currency_rates)]
     B -->|XCom| D(EmailOperator<br/>send_email)
     D -->|SMTP SSL| E[Mail.ru<br/>Email]
+```
+
 🛠 Стек технологий
 Оркестрация: Apache Airflow 2.8.1 (развернут в Docker, LocalExecutor)
 
@@ -34,17 +36,17 @@ dags/currency_rates_dag.py — код DAG (PythonOperator + EmailOperator).
 docs/ — скриншоты работы пайплайна.
 
 📸 Скриншоты работы
-1. Успешное выполнение DAG в Airflow (Graph View):
-https://docs/01_dag_graph_success.png
+**1. Успешное выполнение DAG в Airflow (Graph View):**
+![Graph](01_dag_graph_success.png)
 
-2. Лог выполнения задачи fetch_currency_rates:
-https://docs/04_task_log.png
+**2. Лог выполнения задачи `fetch_currency_rates`:**
+![Task Log](04_task_log.png)
 
-3. Данные, сохраненные в PostgreSQL (pgAdmin):
-https://docs/05_postgres_data.png
+**3. Данные, сохраненные в PostgreSQL (pgAdmin):**
+![PostgreSQL](05_postgres_data.png)
 
-4. Результат отправки Email (Mail.ru):
-https://docs/07_email_result.png
+**4. Результат отправки Email (Mail.ru):**
+![Email](07_email_result.png)
 
 🚀 Как запустить локально
 Установите Docker и Docker Compose.
