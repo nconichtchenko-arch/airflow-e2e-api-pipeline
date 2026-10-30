@@ -46,6 +46,7 @@ docs/ — скриншоты работы пайплайна.
 ![PostgreSQL](05_postgres_data.png)
 
 **4. Результат отправки Email (Mail.ru):**
+
 ![Email](07_email_result.png)
 
 🚀 Как запустить локально
