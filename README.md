@@ -26,7 +26,7 @@ graph LR
 
 ## Структура репозитория
 
-* **[`dags/currency_rates_dag.py`](dags/currency_rates_dag.py)** — исходный код DAG (PythonOperator + EmailOperator).
+* **[currency_rates_dag.py](currency_rates_dag.py)** — исходный код DAG (PythonOperator + EmailOperator).
 * `docs/` — скриншоты работы пайплайна.
 
 ## Скриншоты работы
