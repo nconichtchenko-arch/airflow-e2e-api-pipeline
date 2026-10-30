@@ -9,11 +9,13 @@
 
 ## Архитектура
 
-Текстовое описание пайплайна:
-
-- REST API (open.er-api.com) -> PythonOperator (fetch_currency_rates)
-- PythonOperator -> PostgreSQL (таблица currency_rates)
-- PythonOperator -> EmailOperator (send_email) -> SMTP Mail.ru
+```mermaid
+graph LR
+    A[API open.er-api.com] -->|HTTP GET| B(PythonOperator fetch_currency_rates)
+    B -->|INSERT| C[(PostgreSQL currency_rates)]
+    B -->|XCom| D(EmailOperator send_email)
+    D -->|SMTP SSL| E[Mail.ru Email]
+```
 
 ## Стек технологий
 
